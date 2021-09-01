@@ -32,7 +32,28 @@ pygame.font.init()
 clock = pygame.time.Clock()
 font_style = pygame.font.SysFont(None, 50)
 game_run = True
+game_end = False
+
 while game_run:
+    while game_end is True:
+        message(dis, font_style, "The end. Press C to continue or Q to exit", RED)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    game_end = False
+                    game_run = True
+                    X = 200
+                    Y = 150
+                    X_APPEND = 0
+                    Y_APPEND = 0
+
+                if event.key == pygame.K_q:
+                    game_end = False
+                    game_run = False
+
     for event in pygame.event.get():
         print(event)
 
@@ -54,7 +75,7 @@ while game_run:
                 Y_APPEND = VELOCITY
 
     if has_intersects(WINDOW_WIDTH, WINDOW_HEIGHT, X, Y, SNAKE_WIDTH, SNAKE_HEIGHT):
-        game_run = False
+        game_end = True
 
     X += X_APPEND
     Y += Y_APPEND
@@ -66,8 +87,5 @@ while game_run:
 
     clock.tick(30)
 
-message(dis, font_style, "The end", RED)
-pygame.display.update()
-sleep(3)
 pygame.quit()
 quit()
