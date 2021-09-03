@@ -47,7 +47,6 @@ while game_run:
         message(dis, font_style, "The end. Press C to continue or Q to exit", RED)
         pygame.display.update()
 
-
         for event in pygame.event.get():
             # print(event)
             if event.type == pygame.QUIT:
@@ -156,7 +155,7 @@ while game_run:
 
     pygame.display.update()
 
-    clock.tick(30)
+    clock.tick(10)
 
 pygame.quit()
 quit()
