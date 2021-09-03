@@ -1,7 +1,8 @@
 import random
 
 import pygame
-from helpers import message, has_intersect_borders, generate_food, has_intersect_food
+from helpers import message, has_intersect_borders, generate_food, has_intersect_food, snake_intersects_block, \
+    snake_intersects_itself
 
 # CONSTANTS
 WINDOW_HEIGHT = 500
@@ -42,6 +43,10 @@ game_end = False
 game_before_init = True
 new_head = False
 
+def direction_x_by_append(x_append, y_append):
+    return True if x_append else False
+
+
 while game_run:
     while game_end is True:
         message(dis, font_style, "The end. Press C to continue or Q to exit", RED)
@@ -61,6 +66,7 @@ while game_run:
                     Y = 150
                     X_APPEND = 0
                     Y_APPEND = 0
+                    SNAKE = [[X, Y]]
 
                 if event.key == pygame.K_q:
                     game_end = False
@@ -107,12 +113,12 @@ while game_run:
     if has_intersect_borders(WINDOW_WIDTH, WINDOW_HEIGHT, X, Y, SNAKE_WIDTH, SNAKE_HEIGHT):
         game_end = True
 
-    if has_intersect_food(
+    if snake_intersects_block(
             X, Y,
-            X_APPEND, Y_APPEND,
             SNAKE_WIDTH, SNAKE_HEIGHT,
+            direction_x_by_append(X_APPEND, Y_APPEND),
             FOOD_X, FOOD_Y,
-            FOOD_WIDTH, FOOD_HEIGHT
+            FOOD_WIDTH, FOOD_HEIGHT,
     ):
         FOOD_X, FOOD_Y = generate_food(WINDOW_WIDTH, WINDOW_HEIGHT, SNAKE_WIDTH, SNAKE_HEIGHT)
         new_head = True
@@ -123,30 +129,20 @@ while game_run:
     snake_head = [X, Y]
     SNAKE.append(snake_head)
 
-    if new_head:
-        SNAKE.append([X, Y])
-        new_head = False
-
     if len(SNAKE) > 1:
         del SNAKE[0]
 
-    # SNAKE = [
-    #     # [170, 120],
-    #     [180, 120],
-    #     [190, 120],
-    #
-    #     [200, 120],
-    #     [200, 130],
-    #     [200, 140],
-    #
-    #     [200, 150],
-    #     [210, 150],
-    #     [220, 150],
-    #     [230, 150],
-    # ]
-    # Draw on frame
+    if new_head:
+        X += X_APPEND
+        Y += Y_APPEND
+        SNAKE.append([X, Y])
+        new_head = False
+
+    if snake_intersects_itself(SNAKE):
+        print('INTERSECTS')
+        game_end = True
+
     dis.fill(WHITE)
-    # pygame.draw.rect(dis, BLUE, [X, Y, SNAKE_WIDTH, SNAKE_HEIGHT])
     if FOOD_X is not None and FOOD_Y is not None:
         pygame.draw.rect(dis, BLUE, [FOOD_X, FOOD_Y, FOOD_WIDTH, FOOD_HEIGHT])
 
