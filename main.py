@@ -26,6 +26,7 @@ SNAKE = [[X, Y]]
 
 X_APPEND = 0
 Y_APPEND = 0
+SCORE = 0
 
 FOOD_X = None
 FOOD_Y = None
@@ -38,6 +39,7 @@ pygame.font.init()
 
 clock = pygame.time.Clock()
 font_style = pygame.font.SysFont(None, 50)
+font_style_score = pygame.font.SysFont(None, 24)
 game_run = True
 game_end = False
 game_before_init = True
@@ -48,6 +50,8 @@ def direction_x_by_append(x_append, y_append):
 
 
 while game_run:
+    dis.fill(WHITE)
+    message(dis, font_style_score, f"Score: {SCORE}", BLACK)
     while game_end is True:
         message(dis, font_style, "The end. Press C to continue or Q to exit", RED)
         pygame.display.update()
@@ -122,6 +126,7 @@ while game_run:
     ):
         FOOD_X, FOOD_Y = generate_food(WINDOW_WIDTH, WINDOW_HEIGHT, SNAKE_WIDTH, SNAKE_HEIGHT)
         new_head = True
+        SCORE += 1
 
     X += X_APPEND
     Y += Y_APPEND
@@ -142,7 +147,6 @@ while game_run:
         print('INTERSECTS')
         game_end = True
 
-    dis.fill(WHITE)
     if FOOD_X is not None and FOOD_Y is not None:
         pygame.draw.rect(dis, BLUE, [FOOD_X, FOOD_Y, FOOD_WIDTH, FOOD_HEIGHT])
 
