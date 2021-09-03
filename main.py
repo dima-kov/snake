@@ -1,8 +1,6 @@
-import random
-
 import pygame
 from helpers import message, has_intersect_borders, generate_food, has_intersect_food, snake_intersects_block, \
-    snake_intersects_itself
+    snake_intersects_itself, snake_intersects_brick, generate_brick
 
 # CONSTANTS
 WINDOW_HEIGHT = 500
@@ -24,6 +22,8 @@ Y = 150
 
 SNAKE = [[X, Y]]
 
+BRICKS = generate_brick(WINDOW_WIDTH, WINDOW_HEIGHT, SNAKE_WIDTH)
+
 X_APPEND = 0
 Y_APPEND = 0
 SCORE = 0
@@ -44,6 +44,7 @@ game_run = True
 game_end = False
 game_before_init = True
 new_head = False
+
 
 def direction_x_by_append(x_append, y_append):
     return True if x_append else False
@@ -71,6 +72,7 @@ while game_run:
                     X_APPEND = 0
                     Y_APPEND = 0
                     SNAKE = [[X, Y]]
+                    SCORE = 0
 
                 if event.key == pygame.K_q:
                     game_end = False
@@ -147,10 +149,17 @@ while game_run:
         print('INTERSECTS')
         game_end = True
 
+    if snake_intersects_brick(SNAKE[-1], BRICKS):
+        print('INTERSECT BRICK')
+        game_end = True
+
     if FOOD_X is not None and FOOD_Y is not None:
         pygame.draw.rect(dis, BLUE, [FOOD_X, FOOD_Y, FOOD_WIDTH, FOOD_HEIGHT])
 
     for coord_block in SNAKE:
+        pygame.draw.rect(dis, BLUE, [coord_block[0], coord_block[1], SNAKE_WIDTH, SNAKE_HEIGHT])
+
+    for coord_block in BRICKS:
         pygame.draw.rect(dis, BLUE, [coord_block[0], coord_block[1], SNAKE_WIDTH, SNAKE_HEIGHT])
 
     pygame.display.update()

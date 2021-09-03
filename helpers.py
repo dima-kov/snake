@@ -91,8 +91,38 @@ def snake_intersects_itself(snake):
             return True
 
 
+def snake_intersects_brick(snake_head, bricks):
+    for block in bricks:
+        print(snake_head)
+        if snake_head[0] == 400:
+            print('hh')
+        if block == snake_head:
+            return True
+
+
 def generate_food(window_width, window_height, snake_width, snake_height):
     return (
         (round(random.randrange(0, window_width - snake_width) / 10.0) * 10.0),
         (round(random.randrange(0, window_height - snake_height) / 10.0) * 10.0)
     )
+
+
+def generate_brick(window_width, window_height, brick_size) -> list:
+    bricks_x = int(to_ten(window_width / 2))
+    brick_y_start = int(to_ten(window_height / 4))
+    print(brick_y_start)
+    brick_y_end = int(to_ten(window_height - window_height / 4))
+    print(brick_y_end)
+    return [[bricks_x, y] for y in range(brick_y_start, brick_y_end, brick_size)]
+
+
+def to_ten(n):
+    return round(n / 10.0) * 10.0
+
+
+def test_to_ten():
+    assert to_ten(13) == 10.0
+    assert to_ten(0) == 0
+    assert to_ten(-10) == -10.0
+    assert to_ten(100) == 100.0
+    assert to_ten(144) == 140.0
