@@ -47,8 +47,13 @@ while game_run:
         message(dis, font_style, "The end. Press C to continue or Q to exit", RED)
         pygame.display.update()
 
+
         for event in pygame.event.get():
             # print(event)
+            if event.type == pygame.QUIT:
+                game_run = False
+                game_end = False
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
                     game_end = False
